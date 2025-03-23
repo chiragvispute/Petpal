@@ -17,7 +17,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       initialRoute: "/login",
       routes: {
-        "/login": (context) => Loginpage(),
+        "/login": (context) => LoginPage(),
         "/home": (context) => Scaffold(
             body: pages[_selectedIndex],
             bottomNavigationBar: BottomNavigationBar(

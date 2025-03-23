@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
+import 'package:flutter_application_1/screens/users/LoginPage.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final SupabaseService supabaseService = SupabaseService();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
-  RegisterScreen({super.key});
+  String _selectedRole = 'user'; // Default role
+
+  // Profile picture URL, can be added later after upload logic
+  String _profilePictureUrl = 'https://example.com/default_profile.png';
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +65,44 @@ class RegisterScreen extends StatelessWidget {
                     icon: Icons.email),
                 SizedBox(height: 15),
 
+                // Phone Number Field
+                _buildTextField(
+                    controller: _phoneNumberController,
+                    hintText: "Phone Number",
+                    icon: Icons.phone),
+                SizedBox(height: 15),
+
                 // Password Field
                 _buildTextField(
                     controller: _passwordController,
                     hintText: "Password",
                     icon: Icons.lock,
                     isPassword: true),
+                SizedBox(height: 24),
+
+                // Role Dropdown
+                DropdownButton<String>(
+                  value: _selectedRole,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedRole = newValue!;
+                    });
+                  },
+                  items: <String>['user', 'volunteer', 'ngo']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value[0].toUpperCase() + value.substring(1),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  }).toList(),
+                  dropdownColor: Color(0xFF222831),
+                  iconEnabledColor: Colors.white,
+                  iconSize: 30,
+                ),
+
                 SizedBox(height: 24),
 
                 // Sign Up Button
@@ -70,6 +114,9 @@ class RegisterScreen extends StatelessWidget {
                         fullName: _fullNameController.text.trim(),
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim(),
+                        phoneNumber: _phoneNumberController.text.trim(),
+                        role: _selectedRole,
+                        profilePictureUrl: _profilePictureUrl,
                       );
                     }),
 
@@ -80,7 +127,7 @@ class RegisterScreen extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    "Have an account?? Login",
+                    "Have an account? Login",
                     style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline,
