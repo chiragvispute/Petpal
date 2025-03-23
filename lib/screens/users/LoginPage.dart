@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart'; 
-import 'package:flutter_application_1/SupabaseServices.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/auth/SupabaseServices.dart';
+import 'package:flutter_application_1/screens/users/RegisterPage.dart';
 
-class RegisterScreen extends StatelessWidget {
-  final SupabaseService supabaseService = SupabaseService();
-  final TextEditingController _fullNameController = TextEditingController();
+class Loginpage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  RegisterScreen({super.key});
+  Loginpage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context_) {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 30),
@@ -20,7 +19,7 @@ class RegisterScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('assets/profile.png', height: 80),
+                Image.asset('assets/expenses.png', height: 80),
                 SizedBox(height: 10),
                 Text("PetPal",
                     style: TextStyle(
@@ -28,59 +27,42 @@ class RegisterScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
                 SizedBox(height: 30),
-
-                Text("Create Account",
+                Text("Welcome Back!",
                     style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white)),
-                SizedBox(height: 8),
-                Text("Sign up to get started!",
-                    style: TextStyle(fontSize: 16, color: Colors.grey)),
                 SizedBox(height: 20),
-
-                // Full Name Field
-                _buildTextField(
-                    controller: _fullNameController,
-                    hintText: "Full Name",
-                    icon: Icons.person),
-                SizedBox(height: 15),
-
-                // Email Field
                 _buildTextField(
                     controller: _emailController,
                     hintText: "Email",
                     icon: Icons.email),
                 SizedBox(height: 15),
-
-                // Password Field
                 _buildTextField(
                     controller: _passwordController,
                     hintText: "Password",
                     icon: Icons.lock,
                     isPassword: true),
                 SizedBox(height: 24),
-
-                // Sign Up Button
                 _buildButton(
-                    text: "Sign Up",
+                    text: "Login",
                     onPressed: () async {
-                      await supabaseService.registerUser(
-                        context: context,
-                        fullName: _fullNameController.text.trim(),
+                      await SupabaseService().loginUser(
+                        context: context_,
                         email: _emailController.text.trim(),
                         password: _passwordController.text.trim(),
                       );
                     }),
-
                 SizedBox(height: 20),
-
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context_,
+                      MaterialPageRoute(builder: (context) => RegisterScreen()),
+                    );
                   },
                   child: Text(
-                    "Have an account?? Login",
+                    "Don't have an account? Register",
                     style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline,
@@ -121,8 +103,8 @@ class RegisterScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         padding: EdgeInsets.symmetric(horizontal: 140, vertical: 12),
       ),
-      child: Text(text,
-          style: TextStyle(fontSize: 18, color: Color(0xFF222831))),
+      child:
+          Text(text, style: TextStyle(fontSize: 18, color: Color(0xFF222831))),
     );
   }
 }

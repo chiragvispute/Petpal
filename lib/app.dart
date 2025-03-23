@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/LoginPage.dart';
+import 'package:flutter_application_1/screens/users/LoginPage.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -8,9 +8,7 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-  final List<Widget> pages = [
-    
-  ];
+final List<Widget> pages = [];
 
 class _AppState extends State<App> {
   int _selectedIndex = 0;
@@ -19,8 +17,8 @@ class _AppState extends State<App> {
     return MaterialApp(
       initialRoute: "/login",
       routes: {
-        "/login" : (context)=>Loginpage(),
-        "/home" : (context) => Scaffold(
+        "/login": (context) => Loginpage(),
+        "/home": (context) => Scaffold(
             body: pages[_selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: _selectedIndex,

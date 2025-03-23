@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/LoginPage.dart';
-import 'package:flutter_application_1/HomePage.dart'; // Import HomePage
+import 'package:flutter_application_1/screens/users/LoginPage.dart';
+import 'package:flutter_application_1/screens/users/HomePage.dart'; // Import HomePage
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SupabaseService {
@@ -10,8 +10,10 @@ class SupabaseService {
 
   Future<void> initialize() async {
     await Supabase.initialize(
-      url: 'https://xqlzeqqnoppctqyywnsm.supabase.co', // Your Supabase project URL
-      anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxbHplcXFub3BwY3RxeXl3bnNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTIxMjgsImV4cCI6MjA1NTE4ODEyOH0.fxot9GiTT6wj73eXb9L37hlnDPfXQh0el1GBju3TLtY', // Your Supabase anon key
+      url:
+          'https://xqlzeqqnoppctqyywnsm.supabase.co', // Your Supabase project URL
+      anonKey:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxbHplcXFub3BwY3RxeXl3bnNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk2MTIxMjgsImV4cCI6MjA1NTE4ODEyOH0.fxot9GiTT6wj73eXb9L37hlnDPfXQh0el1GBju3TLtY', // Your Supabase anon key
     );
   }
 
@@ -43,7 +45,8 @@ class SupabaseService {
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()), // Navigate to HomePage
+          MaterialPageRoute(
+              builder: (context) => HomePage()), // Navigate to HomePage
         );
       }
     } catch (e) {
@@ -71,7 +74,8 @@ class SupabaseService {
       if (response.user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()), // Navigate to HomePage
+          MaterialPageRoute(
+              builder: (context) => HomePage()), // Navigate to HomePage
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -103,7 +107,9 @@ class SupabaseService {
     await Supabase.instance.client.auth.signOut();
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => Loginpage()), // Navigate back to LoginPage after logout
+      MaterialPageRoute(
+          builder: (context) =>
+              Loginpage()), // Navigate back to LoginPage after logout
     );
   }
 }
