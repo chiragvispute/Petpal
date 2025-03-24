@@ -10,6 +10,12 @@ dependencies:
   flutter:
     sdk: flutter
   supabase_flutter: ^2.8.3
+  camera: ^0.10.0+1
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  geolocator: ^10.0.0
+  image_picker: ^0.8.7+3
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:
