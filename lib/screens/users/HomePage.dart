@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/users/LoginPage.dart';
 import 'package:flutter_application_1/auth/SupabaseServices.dart';
+import 'package:flutter_application_1/screens/users/camera_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+// Import the global supabase client
+final supabase = Supabase.instance.client;
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -30,7 +35,14 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(right: 10),
             child: OutlinedButton.icon(
               onPressed: () async {
-                await _supabaseService.logout(context);
+                // Fixed: Pass context to logout method and handle navigation
+                await _supabaseService.logout();
+                // Navigate to login page after logout
+                if (!mounted) return;
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
               },
               icon: const Icon(Icons.logout, color: Colors.white),
               label: const Text(
@@ -50,12 +62,14 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _selectedIndex == 0
           ? _buildHomeContent()
-          : Center(
-              child: Text(
-                _selectedIndex == 1 ? "Camera Page" : "Profile Page",
-                style: const TextStyle(fontSize: 24),
-              ),
-            ),
+          : _selectedIndex == 1
+              ? CameraScreen() // Direct navigation to camera screen
+              : Center(
+                  child: Text(
+                    "Profile Page",
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -77,6 +91,25 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xFFFFF4E0),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Fixed: add a delay to avoid infinite navigation loop
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuthentication();
+    });
+  }
+
+  Future<void> _checkAuthentication() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
   }
 
   Widget _buildHomeContent() {
@@ -143,9 +176,18 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  onPressed: () {
-                    // Navigate to camera/upload page
-                    _onItemTapped(1);
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CameraScreen()),
+                    );
+
+                    if (result == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Report submitted successfully!')),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink,
